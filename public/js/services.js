@@ -56,30 +56,6 @@ exports.getMessage = function (data, mutedFP, userIdManager, profile, messages) 
 
     var children = messages.find('li');
 
-    var waypoints = [];
-
-    waypoints.push(new Waypoint({
-      element: li[0],
-      handler: function (direction) {
-        $(this.element).toggleClass('in-view', direction === 'up');
-        video[0][direction === 'up' ? 'play' : 'pause']();
-      },
-      offset: function () {
-        return -$(this.element).outerHeight();
-      }
-    }));
-
-    waypoints.push(new Waypoint({
-      element: li[0],
-      handler: function (direction) {
-        $(this.element).toggleClass('in-view', direction === 'down');
-        video[0][direction === 'down' ? 'play' : 'pause']();
-      },
-      offset: '100%'
-    }));
-
-    li.data('waypoints', waypoints);
-
     var size = $(window).innerHeight();
     var last = messages[0].lastChild;
     var bottom = last ? last.getBoundingClientRect().bottom : 0;
@@ -87,16 +63,7 @@ exports.getMessage = function (data, mutedFP, userIdManager, profile, messages) 
 
     if (follow) {
       if (children.length > MAX_LIMIT) {
-        children.slice(0, children.length - MAX_LIMIT).each(function () {
-          $(this).data('waypoints').forEach(function (waypoint) {
-            waypoint.destroy();
-          });
-          var saveLink = $(this).find('.save');
-          if (saveLink.length) {
-            window.URL.revokeObjectURL(saveLink.attr('href'));
-          }
-        }).remove();
-        Waypoint.refreshAll();
+        children.slice(0, children.length - MAX_LIMIT).remove();
       }
 
       li[0].scrollIntoView();
