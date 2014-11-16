@@ -33,28 +33,28 @@ exports.getMessage = function (data, mutedFP, userIdManager, profile, messages) 
 
   if (!mutedFP[data.fingerprint]) {
     var li = $('<li data-fp="' + data.fingerprint + '" />');
+
     var videoContainer = $('<div class="video-container"/>');
     var video = $('<video src="' + data.media + '" autoplay="autoplay" loop />');
     var convertButton = $('<a class="convert">Save as GIF</a>');
-    var p = $('<p />');
-    var userControls = '';
-
-    if (!userIdManager.contains(data.fingerprint)) {
-      userControls = '<button class="mute">mute</button>';
-    }
+    videoContainer.append(video).append(convertButton);
 
     var created = moment(new Date(data.created));
     var time = $('<time datetime="' + created.toISOString() + '" class="timestamp">' +
       created.format('LT') + '</time>');
 
-    var actions = $('<div class="actions">' + userControls +'</div>');
+    var p = $('<p />');
     p.html(data.message);
-    videoContainer.append(video).append(convertButton);
-    li.append(videoContainer).append(p).append(actions);
-    messages.append(li);
     p.append(time);
 
-    var children = messages.find('li');
+    var userControls = '';
+    if (!userIdManager.contains(data.fingerprint)) {
+      userControls = '<button class="mute">mute</button>';
+    }
+    var actions = $('<div class="actions">' + userControls +'</div>');
+
+    li.append(videoContainer).append(p).append(actions);
+    messages.append(li);
 
     var waypoints = [];
 
@@ -80,6 +80,7 @@ exports.getMessage = function (data, mutedFP, userIdManager, profile, messages) 
 
     li.data('waypoints', waypoints);
 
+    var children = messages.find('li');
     var size = $(window).innerHeight();
     var last = messages[0].lastChild;
     var bottom = last ? last.getBoundingClientRect().bottom : 0;
