@@ -1,6 +1,6 @@
 var $ = require('jquery');
 var Waypoint = require('waypoints');
-var socket = io();
+var socket = io('https://chat.meatspac.es:443');
 var moment = require('moment');
 
 var comment = $('#composer-message');

@@ -5,7 +5,7 @@ var music = require('./music');
 var services = require('./services');
 var vid2gif = require('vid2gif');
 var UserIdManager = require('./user-id-manager');
-var socket = io();
+var socket = io('https://chat.meatspac.es:443');
 
 var rtc = false;
 var webmSupport = false;
